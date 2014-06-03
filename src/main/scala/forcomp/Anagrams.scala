@@ -58,7 +58,19 @@ object Anagrams {
    *    List(('a', 1), ('e', 1), ('t', 1)) -> Seq("ate", "eat", "tea")
    *
    */
-  lazy val dictionaryByOccurrences: Map[Occurrences, List[Word]] = ???
+  lazy val dictionaryByOccurrences: Map[Occurrences, List[Word]] = dictionaryArranger(dictionary,Map[Occurrences, List[Word]]()) 
+  
+  def dictionaryArranger(words:List[Word], mapAcc:Map[Occurrences, List[Word]]): Map[Occurrences, List[Word]] = 
+  {
+    words match
+    {
+      case head::tail => val key = wordOccurrences(head).sortWith((wordOcc1,wordOcc2)=>wordOcc1._1 > wordOcc2._1)
+                         dictionaryArranger(words.tail,mapAcc+((key-> (mapAcc.getOrElse(key, List()) ::: List(head)))))
+      case Nil => mapAcc
+    }
+  }
+  
+  
 
   /** Returns all the anagrams of a given word. */
   def wordAnagrams(word: Word): List[Word] = ???
