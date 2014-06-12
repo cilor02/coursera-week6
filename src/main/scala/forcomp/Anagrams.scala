@@ -37,11 +37,7 @@ object Anagrams {
 
 
   /** Converts a sentence into its character occurrence list. */
-  def sentenceOccurrences(s: Sentence): Occurrences = 
-    {
-      val a = s.foldLeft(List[Word]())(_ ::: List( _ ))
-      wordOccurrences(a.head)
-    }
+  def sentenceOccurrences(s: Sentence): Occurrences = wordOccurrences(s.foldLeft("")(_.concat(_) ))
   
   /** The `dictionaryByOccurrences` is a `Map` from different occurrences to a sequence of all
    *  the words that have that occurrence count.
@@ -64,7 +60,7 @@ object Anagrams {
   {
     words match
     {
-      case head::tail => val key = wordOccurrences(head).sortWith((wordOcc1,wordOcc2)=>wordOcc1._1 > wordOcc2._1)
+      case head::tail => val key = wordOccurrences(head).sortWith((wordOcc1,wordOcc2)=>wordOcc1._1 < wordOcc2._1)
                          dictionaryArranger(words.tail,mapAcc+((key-> (mapAcc.getOrElse(key, List()) ::: List(head)))))
       case Nil => mapAcc
     }
@@ -73,8 +69,13 @@ object Anagrams {
   
 
   /** Returns all the anagrams of a given word. */
-  def wordAnagrams(word: Word): List[Word] = ???
+  def wordAnagrams(word: Word): List[Word] = dictionaryByOccurrences(wordOccurrences(word).sortWith((wordOcc1,wordOcc2)=>wordOcc1._1 < wordOcc2._1))
 
+  
+ 
+    
+
+  
   /** Returns the list of all subsets of the occurrence list.
    *  This includes the occurrence itself, i.e. `List(('k', 1), ('o', 1))`
    *  is a subset of `List(('k', 1), ('o', 1))`.
@@ -97,8 +98,32 @@ object Anagrams {
    *  Note that the order of the occurrence list subsets does not matter -- the subsets
    *  in the example above could have been displayed in some other order.
    */
-  def combinations(occurrences: Occurrences): List[Occurrences] = ???
-
+  def combinations(occurrences: Occurrences): List[Occurrences] = {
+  def allSubsets (occs : (Char, Int)) : List[(Char,Int)]
+=
+{
+  occs._2 match
+  {
+     case 0 => Nil
+     case _ => occs :: allSubsets((occs._1,occs._2 - 1))
+  }
+} 
+  
+def xyz (existingOccs: List[Occurrences], newOccs : Occurrences):List[Occurrences] =
+{
+newOccs.foldLeft(List[Occurrences]())((acc,foldItem)=> acc::: existingOccs.map((count) =>count ::: List(foldItem)))
+} 
+  
+def findAllSubsetsAcc (occs:Occurrences, acc:List[Occurrences]):List[Occurrences] =
+{
+occs match
+{
+case Nil => acc
+case (head::tail) => findAllSubsetsAcc(tail ,acc::: xyz(acc,allSubsets(head)))
+}
+}
+findAllSubsetsAcc(occurrences, List[Occurrences](List()))
+}
   /** Subtracts occurrence list `y` from occurrence list `x`.
    * 
    *  The precondition is that the occurrence list `y` is a subset of
