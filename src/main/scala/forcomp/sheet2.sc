@@ -51,5 +51,28 @@ findAllSubsetsAcc(occs, List[Occurrences](List()))
                                                   //| rences]
                   
 findAllSubsets(Nil)                               //> res1: List[forcomp.sheet2.Occurrences] = List(List())
-  
+
+  def subtract(x: Occurrences, y: Occurrences): Occurrences =
+  {
+   x match
+    {
+      case _ if y == Nil => x
+      case Nil => Nil
+      case head::tail =>
+        val newHead = y.foldLeft(head)((a,b)=>{ if(b._1 == head._1) (head._1,(head._2 - b._2))else a})
+        
+        if(newHead._2 == 0)
+        {
+          subtract(x.tail,y)
+        }
+        else
+        {
+          newHead::subtract(x.tail,y)
+        }
+         
+    }
+  }                                               //> subtract: (x: forcomp.sheet2.Occurrences, y: forcomp.sheet2.Occurrences)for
+                                                  //| comp.sheet2.Occurrences
+ subtract (List(('a',4),('b',5),('c',2)),List(('a',2),('b',5),('c',1)))
+                                                  //> res2: forcomp.sheet2.Occurrences = List((a,2), (c,1))
 }

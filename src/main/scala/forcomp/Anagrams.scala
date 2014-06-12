@@ -134,7 +134,26 @@ findAllSubsetsAcc(occurrences, List[Occurrences](List()))
    *  Note: the resulting value is an occurrence - meaning it is sorted
    *  and has no zero-entries.
    */
-  def subtract(x: Occurrences, y: Occurrences): Occurrences = ???
+  def subtract(x: Occurrences, y: Occurrences): Occurrences =
+  {
+   x match
+    {
+      case _ if y == Nil => x
+      case Nil => Nil
+      case head::tail =>
+        val newHead = y.foldLeft(head)((a,b)=>{ if(b._1 == head._1) (head._1,(head._2 - b._2))else a})
+        
+        if(newHead._2 == 0)
+        {
+          subtract(x.tail,y)
+        }
+        else
+        {
+          newHead::subtract(x.tail,y)
+        }
+         
+    }
+  } 
 
   /** Returns a list of all anagram sentences of the given sentence.
    *  

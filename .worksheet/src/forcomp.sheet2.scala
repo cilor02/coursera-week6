@@ -45,6 +45,27 @@ case (head::tail) => findAllSubsetsAcc(tail ,acc::: xyz(acc,allSubsets(head)))
 findAllSubsetsAcc(occs, List[Occurrences](List()))
 };System.out.println("""findAllSubsets: (occs: forcomp.sheet2.Occurrences)List[forcomp.sheet2.Occurrences]""");$skip(39); val res$1 = 
                   
-findAllSubsets(Nil);System.out.println("""res1: List[forcomp.sheet2.Occurrences] = """ + $show(res$1))}
-  
+findAllSubsets(Nil);System.out.println("""res1: List[forcomp.sheet2.Occurrences] = """ + $show(res$1));$skip(441); 
+
+  def subtract(x: Occurrences, y: Occurrences): Occurrences =
+  {
+   x match
+    {
+      case _ if y == Nil => x
+      case Nil => Nil
+      case head::tail =>
+        val newHead = y.foldLeft(head)((a,b)=>{ if(b._1 == head._1) (head._1,(head._2 - b._2))else a})
+        
+        if(newHead._2 == 0)
+        {
+          subtract(x.tail,y)
+        }
+        else
+        {
+          newHead::subtract(x.tail,y)
+        }
+         
+    }
+  };System.out.println("""subtract: (x: forcomp.sheet2.Occurrences, y: forcomp.sheet2.Occurrences)forcomp.sheet2.Occurrences""");$skip(72); val res$2 = 
+ subtract (List(('a',4),('b',5),('c',2)),List(('a',2),('b',5),('c',1)));System.out.println("""res2: forcomp.sheet2.Occurrences = """ + $show(res$2))}
 }
