@@ -33,7 +33,7 @@ object Anagrams {
    *  Note: the uppercase and lowercase version of the character are treated as the
    *  same character, and are represented as a lowercase character in the occurrence list.
    */
-  def wordOccurrences(w: Word): Occurrences = w.groupBy((c:Char)=> c).toList.map((a) => (a._1,a._2.size) )
+  def wordOccurrences(w: Word): Occurrences = (w.toLowerCase().groupBy((c:Char)=> c).toList.map((a) => (a._1,a._2.size) )).sortWith((wordOcc1,wordOcc2)=>wordOcc1._1 < wordOcc2._1)
 
 
   /** Converts a sentence into its character occurrence list. */
@@ -60,7 +60,7 @@ object Anagrams {
   {
     words match
     {
-      case head::tail => val key = wordOccurrences(head).sortWith((wordOcc1,wordOcc2)=>wordOcc1._1 < wordOcc2._1)
+      case head::tail => val key = wordOccurrences(head)
                          dictionaryArranger(words.tail,mapAcc+((key-> (mapAcc.getOrElse(key, List()) ::: List(head)))))
       case Nil => mapAcc
     }
@@ -196,5 +196,28 @@ findAllSubsetsAcc(occurrences, List[Occurrences](List()))
    *  Note: There is only one anagram of an empty sentence.
    */
   def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
+ /* {
+    val sentenceOccs = sentenceOccurrences(sentence)
+    val perms = combinations(sentenceOccs)
+    
+    def sentenceAnagramsOccs(perms: List[Occurrences], sentenceOccs:Occurrences) : List[Occurrences] =
+    {
+    if(subtractable (perms, sentenceOccs))
+    {
+      sentenceAnagramsOccs(subtract(sentenceOccs, perms.head),perms)
+    }
+    else
+    {
+      sentenceAnagramsOccs(
+      
+    }
+    }
+    List(sentence)
+  }
 
+  def subtractable(perms:List[Occurrences], subtractedWord:Occurrences) :Boolean =
+  {
+    perms.contains(subtractedWord)
+  }
+  */
 }
