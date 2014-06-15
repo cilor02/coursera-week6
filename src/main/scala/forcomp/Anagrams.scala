@@ -1,6 +1,7 @@
 package forcomp
 
 import common._
+import scala.collection.mutable.ListBuffer
 
 object Anagrams {
 
@@ -196,6 +197,78 @@ findAllSubsetsAcc(occurrences, List[Occurrences](List()))
    *  Note: There is only one anagram of an empty sentence.
    */
   def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
+  
+  def isSubtractable(x: Occurrences, y: Occurrences): Boolean =
+  {
+   y match
+    {
+     case Nil => true
+     case head::tail => x.exists((t) => {t._1 == head._1 && t._2 >= head._2}) && isSubtractable(x,y.tail);         
+    }
+  } 
+  
+  def useUseAnans(wordOcc:Occurrences) :List[List[List[Word]]] =
+  {
+    useAnans(wordOcc).map((l)=> l.map(dictionaryByOccurrences))
+  }
+  
+  def useFlatAnans(wordOcc:Occurrences) :List[List[Word]] =
+  {
+    useAnans(wordOcc).map((l)=> l.flatMap(dictionaryByOccurrences))
+  }
+  
+  
+  def useAnans(wordOcc:Occurrences):List[List[Occurrences]] =
+  {
+    var perms = ListBuffer[List[Anagrams.Occurrences]]()
+    Anans(wordOcc, List[Anagrams.Occurrences](), perms)
+    perms.toList
+  }
+  
+  def Anans(wordOcc:Occurrences, acc:List[Occurrences],  perms :ListBuffer[List[Occurrences]]) 
+  {
+    
+      if(wordOcc isEmpty)
+      {
+        //acc.foreach((a) =>print ( dictionaryByOccurrences(a)))
+        //println
+        perms += acc
+      }
+    
+    val subSets = combinations(wordOcc)
+    //println(subSets)
+    subSets.filter(dictionaryByOccurrences.contains(_)).foreach((sub) =>     
+        if(isSubtractable (wordOcc,sub))
+        {
+          Anans((subtract(wordOcc,sub)),  sub :: acc ,perms);
+        }
+      )
+  }
+    
+  def usePermutate (results: List[List[List[Word]]]): List[List[Word]] =
+  {
+    results match
+    {
+      case Nil => Nil
+      case head::tail => processWords (head) ::: usePermutate (results.tail)
+    }
+  }
+  
+  def processWords(wordList:List[List[Word]]): List[List[Word]] =
+  {
+    wordList.foldLeft(List[List[Word]]())((x,y)=> permutate(x,y))
+  }
+  
+  def permutate (acc:List[List[Word]], words:List[Word]): List[List[Word]] =
+  {
+     words match 
+     {
+       case Nil => Nil
+       case head::tail => acc.foldLeft(List(head))((x,y) => x ::: y ) :: permutate (acc,words.tail)
+     }          
+  }
+  
+  
  /* {
     val sentenceOccs = sentenceOccurrences(sentence)
     val perms = combinations(sentenceOccs)

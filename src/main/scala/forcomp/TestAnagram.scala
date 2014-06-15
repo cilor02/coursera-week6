@@ -10,5 +10,22 @@ object TestAnagram extends App
 
   //println(Anagrams.generateAnagramList(List[List[Char]](List(' ')) , "war".toList, List[List[Char]](List(' '))))
   //println(Anagrams.findAnagrams("bc", List[Anagrams.Word]("a")))
-  println(Anagrams.wordAnagrams("file"))
+  //println(Anagrams.wordAnagrams("file"))
+  //Anagrams.Anans(Anagrams.sentenceOccurrences(List("i", "love","you")), List[Anagrams.Occurrences](), List[List[Anagrams.Occurrences]]())
+    //Anagrams.Anans(Anagrams.sentenceOccurrences(List("Linux", "rulez")), List[Anagrams.Occurrences](), List[List[Anagrams.Occurrences]]())
+      //Anagrams.useUseAnans(Anagrams.useAnans(Anagrams.sentenceOccurrences(List("Linux", "rulez")))).foreach (println)
+      val grams = Anagrams.useFlatAnans(Anagrams.sentenceOccurrences(List("Linux", "rulez")))
+//val zulu = List(List("Zulu"), List("Rex"), List("Lin", "nil")).foldLeft(List[List[String]]())((x,y)=>Anagrams.permutate(x,y))
+//println(zulu)
+
+//val zulu2 = Anagrams.processWords(List(List("Zulu"), List("Lin", "nil"), List("Rex")))
+//println(zulu2)
+grams foreach println
+//println
+//Anagrams.usePermutate(grams).foreach(println)
+      
+      //grams.map ((z) => z.foldLeft(List(z.head))())
+
+
+
 }

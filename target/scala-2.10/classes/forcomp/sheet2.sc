@@ -75,4 +75,62 @@ findAllSubsets(Nil)                               //> res1: List[forcomp.sheet2.
                                                   //| comp.sheet2.Occurrences
  subtract (List(('a',4),('b',5),('c',2)),List(('a',2),('b',5),('c',1)))
                                                   //> res2: forcomp.sheet2.Occurrences = List((a,2), (c,1))
+   def isSubtractable(x: Occurrences, y: Occurrences): Boolean =
+  {
+   y match
+    {
+     case Nil => true
+     case head::tail => x.exists((t) => {t._1 == head._1 && t._2 >= head._2}) && isSubtractable(x,y.tail);
+    }
+  }                                               //> isSubtractable: (x: forcomp.sheet2.Occurrences, y: forcomp.sheet2.Occurrenc
+                                                  //| es)Boolean
+  isSubtractable(List(('a',4),('b',5),('c',2)),List(('a',2),('b',5),('c',1)))
+                                                  //> res3: Boolean = true
+ type Word = String
+ 
+  def permutate (acc:List[List[Word]], words:List[Word]): List[List[Word]] =
+  {
+     words match
+     {
+       case Nil => Nil
+       case head::tail => acc.foldLeft(List(head))((x,y) => x ::: y ) :: permutate (acc,words.tail)
+     }
+  }                                               //> permutate: (acc: List[List[forcomp.sheet2.Word]], words: List[forcomp.sheet
+                                                  //| 2.Word])List[List[forcomp.sheet2.Word]]
+  
+  def processWords(wordList:List[List[Word]]): List[List[Word]] =
+  {
+    wordList match
+    {
+      case Nil => Nil
+      case head::tail => processWords(permutate(wordList.tail,head))
+    }
+  }                                               //> processWords: (wordList: List[List[forcomp.sheet2.Word]])List[List[forcomp.
+                                                  //| sheet2.Word]]
+ val ab = List("a","b")                           //> ab  : List[String] = List(a, b)
+ val c  = List("c")                               //> c  : List[String] = List(c)
+ val deF  = List ("d","e","F")                    //> deF  : List[String] = List(d, e, F)
+ val d  = List(ab,c,deF)                          //> d  : List[List[String]] = List(List(a, b), List(c), List(d, e, F))
+ val listC = List(c)                              //> listC  : List[List[String]] = List(List(c))
+
+//permutate(permutate (List(List("Zulu"), List("Rex")), List("Lin", "nil")), deF)
+//List(List("Zulu"), List("Rex"), List("Lin", "nil")).foldLeft(List[List[Word]]())((x,y)=>permutate(x,y))
+//processWords(List(List("Zulu"), List("Rex"), List("Lin", "nil")))
+ 
+List("Lin", "nil").map(_::List("Rex"))            //> res4: List[List[String]] = List(List(Lin, Rex), List(nil, Rex))
+List("Rex").map(_::List("Lin", "nil"))            //> res5: List[List[String]] = List(List(Rex, Lin, nil))
+List("Rex").map(_::List("Lin", "nil")).map(_:::List("Zulu"))
+                                                  //> res6: List[List[String]] = List(List(Rex, Lin, nil, Zulu))
+ /*
+      println( for{
+        
+        AB <- ab
+        C <- c
+        DEF <- deF
+      } yield List(ab):::List(c):::List(DEF))
+ */
+ //List(ab,c,deF).foldLeft(List[List[List[String]]]()) ((a,b) => b.map((e)=> a :: List(e))
+// d.foldLeft(List[String]()) ((a,b) => b.map((e)=> a :: e))
+ 
+ 
 }
