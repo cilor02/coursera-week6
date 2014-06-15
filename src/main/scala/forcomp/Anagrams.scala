@@ -196,7 +196,13 @@ findAllSubsetsAcc(occurrences, List[Occurrences](List()))
    *
    *  Note: There is only one anagram of an empty sentence.
    */
-  def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
+  def sentenceAnagrams(sentence: Sentence): List[Sentence] = 
+  {
+      val grams = useUseAnans(sentenceOccurrences(sentence))
+      var z = ListBuffer[List[String]]()
+      useSideEffects(grams,z)
+      z.toList
+  }
   
   def isSubtractable(x: Occurrences, y: Occurrences): Boolean =
   {
@@ -206,6 +212,16 @@ findAllSubsetsAcc(occurrences, List[Occurrences](List()))
      case head::tail => x.exists((t) => {t._1 == head._1 && t._2 >= head._2}) && isSubtractable(x,y.tail);         
     }
   } 
+  
+  def zzzzzz(wordList:List[List[Word]],soFar:List[Word],store:ListBuffer[List[Word]]): Unit =
+  {
+
+    wordList match 
+    {
+      case Nil => store += soFar
+      case head::tail => head.foreach((x)=>{ soFar  ::: List(x) ; zzzzzz(tail,soFar ::: List(x),store)})      
+    }
+  }
   
   def useUseAnans(wordOcc:Occurrences) :List[List[List[Word]]] =
   {
@@ -221,17 +237,15 @@ findAllSubsetsAcc(occurrences, List[Occurrences](List()))
   def useAnans(wordOcc:Occurrences):List[List[Occurrences]] =
   {
     var perms = ListBuffer[List[Anagrams.Occurrences]]()
-    Anans(wordOcc, List[Anagrams.Occurrences](), perms)
+    anans(wordOcc, List[Anagrams.Occurrences](), perms)
     perms.toList
   }
   
-  def Anans(wordOcc:Occurrences, acc:List[Occurrences],  perms :ListBuffer[List[Occurrences]]) 
+  def anans(wordOcc:Occurrences, acc:List[Occurrences],  perms :ListBuffer[List[Occurrences]]) 
   {
     
       if(wordOcc isEmpty)
       {
-        //acc.foreach((a) =>print ( dictionaryByOccurrences(a)))
-        //println
         perms += acc
       }
     
@@ -240,7 +254,7 @@ findAllSubsetsAcc(occurrences, List[Occurrences](List()))
     subSets.filter(dictionaryByOccurrences.contains(_)).foreach((sub) =>     
         if(isSubtractable (wordOcc,sub))
         {
-          Anans((subtract(wordOcc,sub)),  sub :: acc ,perms);
+          anans((subtract(wordOcc,sub)),  sub :: acc ,perms);
         }
       )
   }
@@ -254,6 +268,16 @@ findAllSubsetsAcc(occurrences, List[Occurrences](List()))
     }
   }
   
+    def useSideEffects (results: List[List[List[Word]]], acc:ListBuffer[List[Word]]): Unit =
+  {
+    results match
+    {
+      case Nil => Nil
+      case head::tail => zzzzzz(head,List[Word](),acc) ; useSideEffects (results.tail,acc)
+    }
+  }
+    
+    
   def processWords(wordList:List[List[Word]]): List[List[Word]] =
   {
     wordList.foldLeft(List[List[Word]]())((x,y)=> permutate(x,y))
